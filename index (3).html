@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#000000">
+<title>SYSTEM BREACHED</title>
+<style>
+:root{--g:#00ff66;--gd:#0a8f3c;--r:#ff3b4e;--y:#ffd400}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{height:100%;margin:0;background:#000;color:var(--g);font-family:ui-monospace,"Roboto Mono","Courier New",monospace;overflow:hidden;-webkit-tap-highlight-color:transparent}
+button{font:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible{outline:2px solid #fff;outline-offset:2px}
+#rain{position:fixed;inset:0;width:100%;height:100%;opacity:.22}
+#app{position:fixed;inset:0;display:flex;flex-direction:column;gap:8px;padding:calc(10px + env(safe-area-inset-top,0px)) 10px calc(10px + env(safe-area-inset-bottom,0px));max-width:720px;margin:0 auto}
+#app::after{content:"";position:fixed;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,.18) 0 1px,transparent 1px 3px)}
+header{display:flex;justify-content:space-between;align-items:center;font-size:13px}
+#snd{background:none;border:1px solid var(--gd);color:var(--g);border-radius:4px;padding:2px 8px}
+.hud{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.p{border:1px solid var(--gd);background:rgba(0,20,6,.75);padding:6px 8px;font-size:12px;min-width:0}
+.p h4{margin:0 0 3px;font-size:10px;letter-spacing:.12em;color:var(--gd)}
+.p div{font-weight:700;font-size:13px}
+.p small{display:block;margin-top:2px;font-size:10px;color:var(--gd);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#term,#t2{flex:1;overflow:hidden;font-size:13px;line-height:1.5;background:rgba(0,12,4,.7);border:1px solid var(--gd);padding:8px;min-height:0}
+.l{white-space:pre-wrap;word-break:break-word}
+#term .l:last-child::after,#t2 .l:last-child::after{content:"█";margin-left:2px;animation:bl 1s steps(1) infinite}
+@keyframes bl{50%{opacity:0}}
+.ok{color:var(--g)}.sc{color:#4dffd2}.wr{color:var(--y)}.al{color:var(--r);font-weight:700}.dim{color:var(--gd)}
+.lb{display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px}
+.bar{height:14px;border:1px solid var(--g);padding:2px}
+.bar i{display:block;height:100%;width:0;background:var(--g);box-shadow:0 0 8px var(--g)}
+#start{position:fixed;inset:0;z-index:60;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;text-align:center;padding:24px}
+#start h1{margin:0;font-size:clamp(20px,6vw,30px);letter-spacing:.08em}
+#start p{margin:0;color:var(--gd);font-size:13px}
+#go{background:transparent;color:var(--g);border:2px solid var(--g);padding:14px 30px;font-size:18px;font-weight:700;letter-spacing:.15em;box-shadow:0 0 14px rgba(0,255,102,.35)}
+#start label{font-size:13px;color:var(--gd)}
+
+/* FASE 3 + 4 */
+#alert{position:fixed;inset:0;z-index:20;background:radial-gradient(ellipse at center,#4a0008 0%,#1d0004 70%,#0c0002 100%);opacity:0;pointer-events:none;transition:opacity .8s;overflow-y:auto;display:flex;color:var(--r)}
+#alert.on{opacity:1;pointer-events:auto}
+#alert::after{content:"";position:fixed;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,.2) 0 1px,transparent 1px 3px)}
+.box{margin:auto;width:100%;max-width:560px;padding:calc(16px + env(safe-area-inset-top,0px)) 16px calc(16px + env(safe-area-inset-bottom,0px));text-align:center}
+.warn-t{font-size:clamp(16px,5vw,22px);font-weight:700;letter-spacing:.12em}
+.gl{position:relative;display:block;margin:10px 0;font-size:clamp(26px,8.6vw,46px);line-height:1.1;font-weight:900;color:var(--r);text-shadow:0 0 14px rgba(255,59,78,.6)}
+.gl::before,.gl::after{content:attr(data-t);position:absolute;left:0;top:0;width:100%}
+.gl::before{color:var(--g);animation:g1 2.6s steps(1) infinite}
+.gl::after{color:#fff;opacity:.8;animation:g2 3.1s steps(1) infinite}
+@keyframes g1{0%,100%{clip-path:inset(0 0 100% 0)}20%{clip-path:inset(15% 0 60% 0);transform:translate(-3px,0)}22%{clip-path:inset(0 0 100% 0)}60%{clip-path:inset(55% 0 20% 0);transform:translate(3px,0)}63%{clip-path:inset(0 0 100% 0)}}
+@keyframes g2{0%,100%{clip-path:inset(0 0 100% 0)}35%{clip-path:inset(70% 0 5% 0);transform:translate(4px,0)}38%{clip-path:inset(0 0 100% 0)}80%{clip-path:inset(30% 0 45% 0);transform:translate(-4px,0)}83%{clip-path:inset(0 0 100% 0)}}
+.stat{display:inline-block;text-align:left;margin:6px 0;font-size:clamp(13px,4vw,16px);line-height:1.6;color:#ff8a95;border:1px solid #7a1520;padding:8px 14px;background:rgba(0,0,0,.3)}
+#cnt{font-size:clamp(90px,34vw,190px);font-weight:900;line-height:1;margin:4px 0;color:#fff;text-shadow:0 0 22px var(--r)}
+#cnt.pop{animation:pop .9s ease-out}
+@keyframes pop{0%{transform:scale(1.25)}100%{transform:scale(1)}}
+#alert .bar{border-color:var(--r)}
+#alert .bar i{background:var(--r);box-shadow:0 0 8px var(--r);transition:width 1s linear}
+#t2{flex:none;height:128px;text-align:left;font-size:12.5px;color:#ff8a95;background:rgba(0,0,0,.35);border-color:#7a1520;margin-top:10px}
+body.shake .box{animation:shk .5s linear infinite}
+@keyframes shk{0%,100%{transform:translate(0,0)}25%{transform:translate(1.5px,-1px)}50%{transform:translate(-1.5px,1px)}75%{transform:translate(1px,1.5px)}}
+#alert.hard .box{animation:hard .9s steps(9) 1}
+@keyframes hard{0%{transform:translate(0)}15%{transform:translate(-9px,2px) skewX(6deg)}30%{transform:translate(8px,-3px) skewX(-5deg)}45%{transform:translate(-5px,4px) scaleY(.96)}60%{transform:translate(6px,0) skewX(4deg)}80%{transform:translate(-3px,-2px)}100%{transform:none}}
+
+/* ENDING */
+#end{position:fixed;inset:0;z-index:40;background:linear-gradient(135deg,#ffe14d 0%,#ff8ccf 55%,#6be4ff 100%);color:#1d1033;overflow-y:auto;opacity:0;pointer-events:none;transition:opacity .6s;display:flex}
+#end.on{opacity:1;pointer-events:auto}
+#cf,#flw{position:fixed;inset:0;width:100%;height:100%;pointer-events:none}
+#flw{overflow:hidden}
+.fl{position:absolute;bottom:-70px;animation:up linear infinite}
+@keyframes up{to{transform:translateY(-125vh) rotate(25deg)}}
+.ec{position:relative;margin:auto;width:100%;max-width:560px;text-align:center;padding:calc(20px + env(safe-area-inset-top,0px)) 16px calc(24px + env(safe-area-inset-bottom,0px));font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.big{margin:0;font-size:clamp(34px,12.5vw,72px);font-weight:900;line-height:1.05;letter-spacing:-.02em}
+.big.s{font-size:clamp(26px,9.5vw,52px);margin-top:6px}
+.cats{font-size:42px;margin:8px 0;animation:bob 1.2s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-8px)}}
+.msg{background:rgba(255,255,255,.82);border-radius:18px;padding:18px 16px;margin:12px 0;font-weight:700;line-height:1.55;font-size:clamp(15px,4.4vw,19px)}
+.msg h3{margin:0 0 8px;font-size:clamp(22px,7vw,30px)}
+.msg p{margin:0 0 10px}
+.msg .st{font-family:ui-monospace,monospace;font-size:clamp(13px,3.8vw,16px);margin:0;color:#0a6b2e}
+.btns{display:flex;flex-direction:column;gap:10px;margin-top:6px}
+.btns button{border:0;border-radius:14px;padding:15px;font-size:17px;font-weight:800;color:#fff;background:#1d1033;box-shadow:0 4px 0 rgba(0,0,0,.25)}
+.btns button+button{background:#e6008c}
+.btns button:active{transform:translateY(2px);box-shadow:0 2px 0 rgba(0,0,0,.25)}
+#cert{position:fixed;inset:0;z-index:70;background:rgba(10,5,25,.8);display:flex;overflow-y:auto;padding:14px}
+.cc{margin:auto;width:100%;max-width:480px;background:#fff8e1;color:#3b2a00;border:7px double #c9a227;border-radius:6px;padding:22px 16px;text-align:center;font-family:Georgia,"Times New Roman",serif;position:relative}
+.cc h2{margin:0 0 10px;font-size:clamp(19px,6vw,26px);line-height:1.2;color:#7a5600}
+.cc p{margin:8px 0;font-size:15px;line-height:1.5}
+#nm{width:100%;border:0;border-bottom:2px solid #7a5600;background:transparent;text-align:center;font:700 clamp(18px,6vw,24px) Georgia,serif;color:#b3001b;padding:4px}
+.sig{font-size:30px;font-style:italic;font-weight:700;margin:2px 0;color:#1d1033}
+.stamp{position:absolute;right:8px;bottom:70px;transform:rotate(-14deg);border:3px solid #b3001b;color:#b3001b;padding:3px 8px;font:800 12px system-ui,sans-serif;letter-spacing:.06em;opacity:.8}
+.cc button{margin-top:12px;border:0;border-radius:10px;background:#1d1033;color:#fff;padding:11px 24px;font-weight:700}
+@media (prefers-reduced-motion:reduce){body.shake .box,.gl::before,.gl::after,.fl,.cats,#cnt.pop,#alert.hard .box{animation:none}}
+</style>
+</head>
+<body>
+<canvas id="rain"></canvas>
+
+<div id="app">
+  <header><b>root@cyberdeck:~#</b><button id="snd" aria-label="Suara">🔊</button></header>
+  <section class="hud">
+    <div class="p"><h4>SYSTEM STATUS</h4><div id="p1">STANDBY</div><small id="p1b">CPU 00% MEM 00%</small></div>
+    <div class="p"><h4>NETWORK SCAN</h4><div id="p2">IDLE</div><small id="p2b">NODES 0 PORTS 0</small></div>
+    <div class="p"><h4>ACCESS LEVEL</h4><div id="p3">GUEST</div><small>SANDBOX</small></div>
+    <div class="p"><h4>SECURITY ALERT</h4><div id="p4">NONE</div><small id="p4b">0 EVENTS</small></div>
+  </section>
+  <main id="term" aria-live="off"></main>
+  <div id="pw" hidden><div class="lb"><span>SCAN PROGRESS</span><span id="pct">0%</span></div><div class="bar"><i id="pf"></i></div></div>
+</div>
+
+<div id="start">
+  <h1>SECURE TERMINAL v4.2</h1>
+  <p>Ketuk untuk memulai inisialisasi sistem.</p>
+  <button id="go">INITIALIZE</button>
+  <label><input type="checkbox" id="sc" checked> Suara keyboard dan alarm (pelan)</label>
+</div>
+
+<div id="alert" aria-live="polite">
+  <div class="box">
+    <div class="warn-t">⚠️ PERINGATAN SISTEM</div>
+    <span class="gl" data-t="DATA ANDA TELAH DIRETAS!">DATA ANDA TELAH DIRETAS!</span>
+    <pre class="stat">STATUS      : CRITICAL
+ACCESS      : SIMULATED
+DATA        : NOT ACCESSED
+SYSTEM      : PRANK MODE</pre>
+    <div id="cnt">10</div>
+    <div class="lb" style="margin-top:6px"><span id="lb2">Preparing to reveal all secrets...</span><span id="pct2">0%</span></div>
+    <div class="bar"><i id="pf2"></i></div>
+    <div id="t2"></div>
+  </div>
+</div>
+
+<div id="end">
+  <canvas id="cf"></canvas>
+  <div id="flw"></div>
+  <div class="ec">
+    <h1 class="big">WKWKWKWK 😭😭😭</h1>
+    <h2 class="big s">KENA PRANK, BANG!</h2>
+    <div class="cats">🐱😹🙀</div>
+    <div class="msg">
+      <h3>😂 TENANG, BANG!</h3>
+      <p>DATA KAMU AMAN.<br>GAK ADA YANG DIRETAS.<br>GAK ADA YANG DICURI.</p>
+      <p>HACKERNYA CUMA MODAL HTML DAN NIAT BIKIN KAMU PANIK. 🤣</p>
+      <p class="st">MISSION STATUS: PRANK SUCCESSFUL<br>THREAT LEVEL: 0%</p>
+    </div>
+    <div class="btns">
+      <button id="again">ULANGI PRANK 🔄</button>
+      <button id="claim">KLAIM SERTIFIKAT KORBAN 😭</button>
+    </div>
+  </div>
+</div>
+
+<div id="cert" hidden>
+  <div class="cc" role="dialog" aria-label="Sertifikat">
+    <h2>SERTIFIKAT KORBAN PRANK HACKER</h2>
+    <p>Diberikan kepada:</p>
+    <input id="nm" maxlength="26" value="KORBAN PALING PANIK" aria-label="Nama penerima">
+    <p>Atas keberhasilan mempercayai terminal HTML selama beberapa detik.</p>
+    <p style="margin-top:16px">Ditandatangani oleh:</p>
+    <div class="sig">GERDY</div>
+    <p style="margin:0"><b>Hacker KW Elite 🤣</b></p>
+    <p id="cdate" style="font-size:12px;color:#7a5600"></p>
+    <div class="stamp">ASLI KW</div>
+    <button id="cclose">TUTUP</button>
+  </div>
+</div>
+
+<script>
+const $=s=>document.querySelector(s);
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const rnd=(a,b)=>Math.floor(a+Math.random()*(b-a+1));
+let run=0,ac=null,snd=false,lastTick=0,hudT=0,rT=0,cfId=0;
+
+/* ===== Suara (WebAudio lokal, aktif setelah ketukan) ===== */
+function tone(f,d,v,t){
+  if(!snd||!ac)return;
+  const o=ac.createOscillator(),g=ac.createGain(),n=ac.currentTime;
+  o.type=t||'sine';o.frequency.value=f;o.connect(g);g.connect(ac.destination);
+  g.gain.setValueAtTime(v,n);g.gain.exponentialRampToValueAtTime(.0001,n+d);
+  o.start(n);o.stop(n+d+.02);
+}
+function tick(){const n=performance.now();if(n-lastTick>45){lastTick=n;tone(rnd(1400,1900),.025,.012,'square');}}
+
+/* ===== Terminal ===== */
+const CLS={'[OK]':'ok','[WARN]':'wr','[ALERT]':'al','[SCAN]':'sc','[INFO]':'dim','[BOOT]':'dim'};
+function add(el,txt,cls){
+  const d=document.createElement('div');
+  d.className='l '+(cls||CLS[txt.split(' ')[0]]||'');
+  d.textContent=txt;el.appendChild(d);
+  while(el.children.length>60)el.firstChild.remove();
+  el.scrollTop=el.scrollHeight;return d;
+}
+async function line(el,txt,ck,speed=12){
+  const d=add(el,'');d.className='l '+(CLS[txt.split(' ')[0]]||'');
+  for(let i=0;i<txt.length;i++){
+    d.textContent=txt.slice(0,i+1);
+    if(i%2===0)tick();
+    el.scrollTop=el.scrollHeight;
+    await sleep(speed);ck();
+  }
+}
+const hex=()=>'0x'+rnd(4096,65535).toString(16).toUpperCase()+'  '+Array.from({length:6},()=>rnd(0,255).toString(16).padStart(2,'0')).join(' ');
+
+/* ===== Panel HUD ===== */
+function st(a,b,c,col){
+  $('#p1').textContent=a;$('#p3').textContent=b;$('#p4').textContent=c;
+  $('#p2').textContent=a==='CRITICAL'?'BREACH':a==='SCANNING'?'ACTIVE':'IDLE';
+  $('#p4').style.color=col||'';
+}
+function hud(){
+  clearInterval(hudT);
+  hudT=setInterval(()=>{
+    $('#p1b').textContent='CPU '+rnd(41,99)+'% MEM '+rnd(30,90)+'%';
+    $('#p2b').textContent='NODES '+rnd(3,48)+' PORTS '+rnd(100,9999);
+    $('#p4b').textContent=rnd(1,40)+' EVENTS';
+  },500);
+}
+
+/* ===== Hujan kode ===== */
+function rain(on){
+  clearInterval(rT);
+  const c=$('#rain'),x=c.getContext('2d');
+  if(!on){x.clearRect(0,0,c.width,c.height);return;}
+  c.width=innerWidth;c.height=innerHeight;
+  const y=Array.from({length:Math.floor(c.width/14)},()=>rnd(-40,0));
+  rT=setInterval(()=>{
+    x.fillStyle='rgba(0,0,0,.12)';x.fillRect(0,0,c.width,c.height);
+    x.fillStyle='#00ff66';x.font='13px monospace';
+    y.forEach((v,i)=>{
+      x.fillText('01ABCDEF<>{}/#$'[rnd(0,14)],i*14,v*14);
+      y[i]=(v*14>c.height&&Math.random()>.97)?0:v+1;
+    });
+  },70);
+}
+
+/* ===== Alur utama ===== */
+function reset(){
+  $('#term').innerHTML='';$('#t2').innerHTML='';
+  $('#pw').hidden=true;$('#pf').style.width='0';$('#pct').textContent='0%';
+  $('#pf2').style.width='0';$('#pct2').textContent='0%';$('#cnt').textContent='10';
+  $('#lb2').textContent='Preparing to reveal all secrets...';
+  $('#alert').classList.remove('on','hard');$('#end').classList.remove('on');
+  $('#cert').hidden=true;document.body.classList.remove('shake');
+  $('#flw').innerHTML='';
+}
+
+async function play(){
+  const id=++run,ck=()=>{if(id!==run)throw 0},w=async ms=>{await sleep(ms);ck();};
+  const term=$('#term');
+  reset();
+  try{
+    rain(true);hud();
+    st('BOOTING','GUEST','NONE');
+
+    /* FASE 1 */
+    for(const t of ['[BOOT] Initializing secure terminal...','[OK] Loading system modules...','[OK] Establishing simulation environment...','[SCAN] Analyzing local demo environment...','[INFO] Security protocol initialized.']){
+      await line(term,t,ck);await w(rnd(250,500));
+    }
+    await w(600);
+
+    /* FASE 2 */
+    st('SCANNING','USER','NONE');$('#pw').hidden=false;
+    const logs=[[0,'[SCAN] Checking system integrity...'],[18,'[SCAN] Analyzing security protocols...'],[42,'[SCAN] Running vulnerability simulation...'],[63,'[SCAN] Mapping decorative nodes...'],[80,'[WARN] Unusual activity detected!'],[94,'[ALERT] SYSTEM COMPROMISED']];
+    let p=0,i=0,n=0;
+    while(p<100){
+      p=Math.min(100,p+Math.random()*3+.5);
+      $('#pf').style.width=p+'%';$('#pct').textContent=Math.floor(p)+'%';
+      if(++n%6===0)add(term,hex(),'dim');
+      while(i<logs.length&&p>=logs[i][0]){
+        const t=logs[i++][1];
+        if(t.startsWith('[WARN]')){st('SCANNING','ADMIN?','1 WARNING','#ffd400');tone(440,.3,.04);await w(700);}
+        if(t.startsWith('[ALERT]')){st('CRITICAL','ROOT (SIM)','CRITICAL','#ff3b4e');tone(300,.4,.05,'sawtooth');}
+        await line(term,t,ck);
+      }
+      await w(130);
+    }
+    await w(1500);
+
+    /* FASE 3 + FASE 4 */
+    rain(false);
+    $('#alert').classList.add('on');document.body.classList.add('shake');
+    const L=['Locating secret files...','Analyzing embarrassing moments...','Searching for hidden crush...','Scanning chat history...','Decrypting embarrassing memories...'];
+    const cnt=$('#cnt');
+    for(let c=10;c>=0;c--){
+      cnt.textContent=c;cnt.classList.remove('pop');void cnt.offsetWidth;cnt.classList.add('pop');
+      $('#pf2').style.width=(10-c)*10+'%';$('#pct2').textContent=(10-c)*10+'%';
+      if(c>0)tone(c<=3?800:520,.22,.04);
+      if(c%2===1&&c<10)line($('#t2'),L[(9-c)/2],ck,10).catch(()=>{});
+      if(c>0)await w(1000);
+    }
+    $('#lb2').textContent='Revealing...';
+    await w(1400);
+    $('#alert').classList.add('hard');tone(180,.5,.05,'sawtooth');
+    await w(950);
+
+    /* ENDING */
+    document.body.classList.remove('shake');
+    $('#alert').classList.remove('on','hard');
+    showEnd();
+  }catch(e){if(e!==0)console.error(e);}
+}
+
+/* ===== Ending ===== */
+function showEnd(){
+  clearInterval(hudT);
+  const end=$('#end');end.classList.add('on');end.scrollTop=0;
+  const f=$('#flw');f.innerHTML='';
+  '😂🤣😭🐱😹🙀😂🤣😹🐱😭🤣😂🐱'.match(/./gu).forEach((e,k)=>{
+    const s=document.createElement('span');s.className='fl';s.textContent=e;
+    s.style.cssText='left:'+rnd(2,92)+'%;font-size:'+rnd(26,48)+'px;animation-duration:'+rnd(7,13)+'s;animation-delay:-'+rnd(0,12)+'s';
+    f.appendChild(s);
+  });
+  [523,659,784,1047].forEach((fr,k)=>setTimeout(()=>tone(fr,.2,.05,'triangle'),k*130));
+  confetti();
+}
+function confetti(){
+  const c=$('#cf'),x=c.getContext('2d'),my=++cfId;
+  c.width=innerWidth;c.height=innerHeight;
+  const cols=['#ff2e93','#1d1033','#fff','#00b8ff','#ffd400','#00c853'];
+  const ps=Array.from({length:110},()=>({x:Math.random()*c.width,y:-Math.random()*c.height,s:6+Math.random()*7,vy:1.5+Math.random()*3,vx:(Math.random()-.5)*2,r:Math.random()*6,vr:(Math.random()-.5)*.2,c:cols[rnd(0,5)]}));
+  (function fr(){
+    if(cfId!==my)return;
+    x.clearRect(0,0,c.width,c.height);
+    ps.forEach(q=>{
+      q.y+=q.vy;q.x+=q.vx+Math.sin(q.y/30);q.r+=q.vr;
+      if(q.y>c.height){q.y=-10;q.x=Math.random()*c.width;}
+      x.save();x.translate(q.x,q.y);x.rotate(q.r);x.fillStyle=q.c;x.fillRect(-q.s/2,-q.s/3,q.s,q.s*.6);x.restore();
+    });
+    requestAnimationFrame(fr);
+  })();
+}
+
+/* ===== Tombol ===== */
+$('#go').onclick=()=>{
+  try{ac=new(window.AudioContext||window.webkitAudioContext)();}catch(e){ac=null;}
+  snd=$('#sc').checked&&!!ac;$('#snd').textContent=snd?'🔊':'🔇';
+  $('#start').remove();play();
+};
+$('#snd').onclick=()=>{
+  if(!ac){try{ac=new(window.AudioContext||window.webkitAudioContext)();}catch(e){return;}}
+  snd=!snd;$('#snd').textContent=snd?'🔊':'🔇';
+};
+$('#again').onclick=()=>{cfId++;play();};
+$('#claim').onclick=()=>{
+  $('#cdate').textContent=new Date().toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'});
+  $('#cert').hidden=false;tone(660,.2,.05,'triangle');
+};
+$('#cclose').onclick=()=>{$('#cert').hidden=true;};
+</script>
+</body>
+</html>
